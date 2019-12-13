@@ -100,11 +100,11 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBox BorderThickness="0" x:Name="PART_TextBox"
+                                <TextBox BorderThickness="0"
+                                         x:Name="PART_TextBox"
                                          wpf:TextFieldAssist.TextBoxViewMargin=".5 0 0 0"
                                          Margin="0"
-                                         Template="{StaticResource TextBoxTemplate}"
-                                         />
+                                         Template="{StaticResource TextBoxTemplate}" />
                                 <Button x:Name="PART_Button"
                                         Grid.Column="1" 
                                         Foreground="{TemplateBinding BorderBrush}" 
