@@ -50,7 +50,21 @@
         <Setter Property="wpf:ButtonProgressAssist.IsIndicatorVisible" Value="False" />
         <Setter Property="wpf:ButtonProgressAssist.Opacity" Value=".4" />
         <Setter Property="wpf:ButtonAssist.CornerRadius" Value="2" />
-
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <wpf:PackIcon
+                            x:Name="LeadingIcon"
+                            Margin="0 0 8 0"
+                            Kind="{Binding Path=(wpf:ButtonAssist.LeadingIcon), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"
+                            Visibility="{Binding Path=(wpf:ButtonAssist.HasLeadingIcon), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+                        <ContentPresenter Content="{Binding Path=Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -80,7 +94,9 @@
                                 </ProgressBar>
                             </Grid>
                         </AdornerDecorator>
-                        <wpf:Ripple Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Focusable="False"
+                        <wpf:Ripple Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    Focusable="False"
                                     ContentStringFormat="{TemplateBinding ContentStringFormat}"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -105,6 +121,9 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Opacity" Value="0.23"/>
+                        </Trigger>
+                        <Trigger Property="wpf:ButtonAssist.HasLeadingIcon" Value="True">
+                            <Setter Property="Padding" Value="12 4 16 4" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
