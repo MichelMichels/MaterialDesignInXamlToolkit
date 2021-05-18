@@ -216,6 +216,59 @@ namespace MaterialDesignThemes.Wpf
         public static double GetLeadingIconSize(DependencyObject element)
             => (double)element.GetValue(LeadingIconSizeProperty);
 
+        /// <summary>
+        /// Controls visibility of the trailing icon
+        /// </summary>
+        public static readonly DependencyProperty HasTrailingIconProperty = DependencyProperty.RegisterAttached(
+            "HasTrailingIcon", typeof(bool), typeof(TextFieldAssist), new PropertyMetadata(default(bool)));
+
+        public static void SetHasTrailingIcon(DependencyObject element, bool value)
+            => element.SetValue(HasTrailingIconProperty, value);
+
+        public static bool GetHasTrailingIcon(DependencyObject element)
+            => (bool)element.GetValue(HasTrailingIconProperty);
+
+        /// <summary>
+        /// Controls the trailing icon
+        /// </summary>
+        public static readonly DependencyProperty TrailingIconProperty = DependencyProperty.RegisterAttached(
+            "TrailingIcon", typeof(PackIconKind), typeof(TextFieldAssist), new PropertyMetadata());
+
+        public static void SetTrailingIcon(DependencyObject element, PackIconKind value)
+            => element.SetValue(TrailingIconProperty, value);
+
+        public static PackIconKind GetTrailingIcon(DependencyObject element)
+            => (PackIconKind)element.GetValue(TrailingIconProperty);
+
+        /// <summary>
+        /// Controls the size of the trailing icon
+        /// </summary>
+        public static readonly DependencyProperty TrailingIconSizeProperty = DependencyProperty.RegisterAttached(
+            "TrailingIconSize", typeof(double), typeof(TextFieldAssist), new PropertyMetadata(20.0));
+
+        public static void SetTrailingIconSize(DependencyObject element, double value)
+            => element.SetValue(TrailingIconSizeProperty, value);
+
+        public static double GetTrailingIconSize(DependencyObject element)
+            => (double)element.GetValue(TrailingIconSizeProperty);
+
+        public static Style GetCharacterCounterStyle(DependencyObject obj) => (Style)obj.GetValue(CharacterCounterStyleProperty);
+
+        public static void SetCharacterCounterStyle(DependencyObject obj, Style value) => obj.SetValue(CharacterCounterStyleProperty, value);
+
+        public static readonly DependencyProperty CharacterCounterStyleProperty =
+            DependencyProperty.RegisterAttached("CharacterCounterStyle", typeof(Style), typeof(TextFieldAssist), new PropertyMetadata(null));
+
+        public static Visibility GetCharacterCounterVisibility(DependencyObject obj)
+            => (Visibility)obj.GetValue(CharacterCounterVisibilityProperty);
+
+        public static void SetCharacterCounterVisibility(DependencyObject obj, Visibility value)
+            => obj.SetValue(CharacterCounterVisibilityProperty, value);
+
+        public static readonly DependencyProperty CharacterCounterVisibilityProperty =
+            DependencyProperty.RegisterAttached("CharacterCounterVisibility", typeof(Visibility), typeof(TextFieldAssist),
+                new PropertyMetadata(Visibility.Visible));
+
         #region Methods
 
         private static void IncludeSpellingSuggestionsChanged(DependencyObject element, DependencyPropertyChangedEventArgs e)
@@ -376,21 +429,24 @@ namespace MaterialDesignThemes.Wpf
         private static void ApplyTextBoxViewMargin(Control textBox, Thickness margin)
         {
             if (margin.Equals(new Thickness(double.NegativeInfinity))
-                || textBox.Template == null)
+                || textBox.Template is null)
+            {
                 return;
+            }
 
             if (textBox is ComboBox
                 && textBox.Template.FindName("PART_EditableTextBox", textBox) is TextBox editableTextBox)
             {
                 textBox = editableTextBox;
-                if (textBox.Template == null)
-                    return;
+                if (textBox.Template is null) return;
                 textBox.ApplyTemplate();
             }
 
             if (textBox.Template.FindName("PART_ContentHost", textBox) is ScrollViewer scrollViewer
                 && scrollViewer.Content is FrameworkElement frameworkElement)
+            {
                 frameworkElement.Margin = margin;
+            }
         }
 
         /// <summary>
@@ -402,7 +458,7 @@ namespace MaterialDesignThemes.Wpf
             DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            if (!(dependencyObject is Control box))
+            if (dependencyObject is not Control box)
             {
                 return;
             }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using MaterialDesignThemes.Wpf;
 using XamlTest;
 using Xunit;
 using Xunit.Abstractions;
@@ -170,6 +171,116 @@ namespace MaterialDesignThemes.UITests.WPF.TextBox
             double fontSize = await helpTextBlock.GetProperty<double>(TextBlock.FontSizeProperty.Name);
 
             Assert.Equal(20, fontSize);
+            recorder.Success();
+        }
+
+        [Fact]
+        [Description("Issue 2203")]
+        public async Task OnOutlinedTextBox_FloatingHintOffsetWithinRange()
+        {
+            await using var recorder = new TestRecorder(App);
+
+            IVisualElement grid = await LoadXaml(@"
+<Grid Margin=""30"">
+    <TextBox
+        Style=""{StaticResource MaterialDesignOutlinedTextBox}""
+        VerticalAlignment=""Top""
+        materialDesign:HintAssist.Hint=""This is a hint""
+    />
+</Grid>");
+            IVisualElement textBox = await grid.GetElement("/TextBox");
+            IVisualElement hint = await textBox.GetElement("Hint");
+
+            Point floatingOffset = await hint.GetProperty<Point>(SmartHint.FloatingOffsetProperty);
+
+            Assert.Equal(0, floatingOffset.X);
+            Assert.InRange(floatingOffset.Y, -22, -20);
+
+            recorder.Success();
+        }
+
+        [Fact]
+        public async Task CharacterCount_WithMaxLengthSet_IsDisplayed()
+        {
+            await using var recorder = new TestRecorder(App);
+
+            IVisualElement grid = await LoadXaml(@"
+<Grid Margin=""30"">
+    <TextBox
+        MaxLength=""10""
+    />
+</Grid>");
+            IVisualElement textBox = await grid.GetElement("/TextBox");
+            IVisualElement characterCounter = await textBox.GetElement("CharacterCounterTextBlock");
+
+            Assert.Equal("0 / 10", await characterCounter.GetText());
+
+            await textBox.SetText("12345");
+
+            Assert.Equal("5 / 10", await characterCounter.GetText());
+
+            recorder.Success();
+        }
+
+        [Fact]
+        public async Task CharacterCount_WithoutMaxLengthSet_IsCollapsed()
+        {
+            await using var recorder = new TestRecorder(App);
+
+            IVisualElement grid = await LoadXaml(@"
+<Grid Margin=""30"">
+    <TextBox />
+</Grid>");
+            IVisualElement textBox = await grid.GetElement("/TextBox");
+            IVisualElement characterCounter = await textBox.GetElement("CharacterCounterTextBlock");
+
+            Assert.False(await characterCounter.GetIsVisible());
+
+            recorder.Success();
+        }
+
+        [Fact]
+        public async Task CharacterCount_WithMaxLengthSetAndCharacterCounterVisibilityCollapsed_IsNotDisplayed()
+        {
+            await using var recorder = new TestRecorder(App);
+
+            IVisualElement grid = await LoadXaml(@"
+<Grid Margin=""30"">
+    <TextBox
+        MaxLength=""10""
+        materialDesign:TextFieldAssist.CharacterCounterVisibility=""Collapsed""
+    />
+</Grid>");
+            IVisualElement textBox = await grid.GetElement("/TextBox");
+            IVisualElement characterCounter = await textBox.GetElement("CharacterCounterTextBlock");
+
+            Assert.False(await characterCounter.GetIsVisible());
+
+            recorder.Success();
+        }
+
+        [Fact]
+        [Description("Issue 2300")]
+        public async Task HelperText_CanSetFontColorWithAttachedStyle()
+        {
+            await using var recorder = new TestRecorder(App);
+
+            IVisualElement grid = await LoadXaml(@"
+<Grid Margin=""30"">
+    <TextBox
+        materialDesign:HintAssist.HelperText=""Test"">
+        <materialDesign:HintAssist.HelperTextStyle>
+            <Style TargetType=""TextBlock"" BasedOn=""{StaticResource MaterialDesignHelperTextBlock}"">
+                <Setter Property=""Foreground"" Value=""Red"" />
+            </Style>
+        </materialDesign:HintAssist.HelperTextStyle>
+    </TextBox>
+</Grid>");
+            IVisualElement textBox = await grid.GetElement("/TextBox");
+            IVisualElement helperText = await textBox.GetElement("HelperTextTextBlock");
+
+            Assert.Equal(Colors.Red, await helperText.GetForegroundColor());
+
             recorder.Success();
         }
     }
