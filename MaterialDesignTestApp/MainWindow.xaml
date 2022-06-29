@@ -1,0 +1,38 @@
+﻿<Window
+    x:Class="MaterialDesignTestApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:MaterialDesignTestApp"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    Style="{StaticResource MaterialDesignWindow}"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel>
+            <materialDesign:Card Margin="16" Padding="32">
+                <StackPanel>
+                    <DatePicker
+                        Width="200"
+                        Margin="8"
+                        HorizontalAlignment="Left"
+                        materialDesign:HintAssist.Hint="Default border"
+                        Style="{StaticResource MaterialDesignFilledDatePicker}" />
+
+                    <DatePicker
+                        Width="200"
+                        Margin="8"
+                        HorizontalAlignment="Left"
+                        materialDesign:HintAssist.Hint="No border"
+                        BorderThickness="0"
+                        Style="{StaticResource MaterialDesignFilledDatePicker}" />
+
+                    <TextBox Text="unfocus" />
+                </StackPanel>
+            </materialDesign:Card>
+        </StackPanel>
+    </Grid>
+</Window>
