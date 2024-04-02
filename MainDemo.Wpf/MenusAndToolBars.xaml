@@ -5,7 +5,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
-             d:DesignHeight="1080"
+             d:DesignHeight="1920"
              d:DesignWidth="1920"
              mc:Ignorable="d">
   <StackPanel>
@@ -16,8 +16,8 @@
       <Menu>
         <MenuItem Header="_File">
           <!--
-          You can set the highlighted color with:
-          materialDesign:MenuItemAssist.HighlightedBackground="Fuchsia"
+            You can set the highlighted color with:
+            materialDesign:MenuItemAssist.HighlightedBackground="Fuchsia"
           -->
           <MenuItem Header="Save" Icon="{materialDesign:PackIcon Kind=ContentSave}" />
 
@@ -330,17 +330,44 @@
 
     <WrapPanel>
       <smtx:XamlDisplay Margin="0,0,16,16" UniqueKey="menus_4">
-        <TextBox Text="With Default Context Menu" />
+        <TextBox Width="256" Text="With Default Context Menu" />
       </smtx:XamlDisplay>
 
-      <smtx:XamlDisplay UniqueKey="menus_5"  Margin="0,0,16,16">
-        <TextBox Text="With Custom Context Menu">
+      <smtx:XamlDisplay Margin="0,0,16,16" UniqueKey="menus_5">
+        <TextBox Width="256" Text="With Custom Context Menu">
           <TextBox.ContextMenu>
             <ContextMenu>
               <MenuItem Header="Hello World" />
               <MenuItem Header="Clickety Click">
                 <MenuItem Header="Clackety Clack" />
               </MenuItem>
+            </ContextMenu>
+          </TextBox.ContextMenu>
+        </TextBox>
+      </smtx:XamlDisplay>
+
+      <smtx:XamlDisplay Margin="0,0,16,16" UniqueKey="menus_6">
+        <smtx:XamlDisplay.Resources>
+          <CompositeCollection x:Key="BaseMenu">
+            <MenuItem Header="Add" />
+            <MenuItem Header="Edit" />
+            <MenuItem Header="Delete" />
+          </CompositeCollection>
+        </smtx:XamlDisplay.Resources>
+
+        <TextBox Width="256" Text="With CompositeCollection (see issue #3464)">
+          <TextBox.ContextMenu>
+            <ContextMenu>
+              <ContextMenu.ItemsSource>
+                <CompositeCollection>
+                  <CollectionContainer Collection="{StaticResource BaseMenu}" />
+                  <Separator />
+                  <MenuItem Header="Hello World" />
+                  <MenuItem Header="Clickety Click">
+                    <MenuItem Header="Clackety Clack" />
+                  </MenuItem>
+                </CompositeCollection>
+              </ContextMenu.ItemsSource>
             </ContextMenu>
           </TextBox.ContextMenu>
         </TextBox>
